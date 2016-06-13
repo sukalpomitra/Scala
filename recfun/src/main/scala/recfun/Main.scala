@@ -16,6 +16,7 @@ object Main {
     print(balance(":-)".toList))
     print(balance("())(".toList))
     println()
+    print(countChange(4,List(1,2)))
   }
 
   /**
@@ -52,19 +53,18 @@ object Main {
    * Exercise 3
    */
     def countChange(money: Int, coins: List[Int]): Int = {
-    def loop(coins: List[Int], ways: Int): Int = {
-      if (coins.isEmpty)
-        0
-      else {
-        if (coins.head == '(')
-          queue += "("
-        else if (chars.head == ')' && !queue.isEmpty)
-          queue.dequeue
-        else if (chars.head == ')' && queue.isEmpty)
-          queue += "("
-        loop(chars.tail, queue)
+
+      def count(capacity: Int, changes: List[Int]): Int = {
+        if(capacity == 0)
+          1
+        else if(capacity < 0)
+          0
+        else if(changes.isEmpty && capacity>=1 )
+          0
+        else
+          count(capacity, changes.tail) + count(capacity - changes.head, changes)
       }
-    }
-    loop(chars, mutable.Queue())
+
+      count(money, coins.sortWith(_.compareTo(_) < 0))
     }
   }
