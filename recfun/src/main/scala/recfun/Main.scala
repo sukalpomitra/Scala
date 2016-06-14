@@ -11,12 +11,6 @@ object Main {
       println()
     }
 
-    print(balance("(if(zero?x)max(/1x))".toList))
-    print(balance("I told him (that it’s not (yet) done). (But he wasn’t listening)".toList))
-    print(balance(":-)".toList))
-    print(balance("())(".toList))
-    println()
-    print(countChange(4,List(1,2)))
   }
 
   /**
