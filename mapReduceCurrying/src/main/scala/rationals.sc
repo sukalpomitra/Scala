@@ -15,7 +15,10 @@ y.add(y)
 x.less(y)
 x.max(y)
 
+new Rational(1,0)
+
 class Rational(x:Int, y:Int) {
+  require(y > 0, "The denominator cannot be zero")
   private def gcd(a:Int, b:Int):Int = if (b == 0) a
   else gcd(b, a % b)
 
