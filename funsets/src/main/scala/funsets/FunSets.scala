@@ -4,7 +4,7 @@ package funsets
 /**
  * 2. Purely Functional Sets.
  */
-object FunSets {
+object FunSets extends App {
   /**
    * We represent a set by its characteristic function, i.e.
    * its `contains` predicate.
@@ -57,36 +57,56 @@ object FunSets {
   /**
    * Returns the subset of `s` for which `p` holds.
    */
-    def filter(s: Set, p: Int => Boolean): Set = if p(x)
+    def filter(s: Set, p: Int => Boolean): Set = (x: Int) => contains(s, x) && p(x)
   
 
   /**
    * The bounds for `forall` and `exists` are +/- 1000.
    */
-  val bound = 1000
+  val bound = 1
 
   /**
    * Returns whether all bounded integers within `s` satisfy `p`.
    */
     def forall(s: Set, p: Int => Boolean): Boolean = {
     def iter(a: Int): Boolean = {
-      if (???) ???
-      else if (???) ???
-      else iter(???)
+      if (a > bound) true
+      else if (contains(s, a) && !p(a)) false
+      else iter(a + 1)
     }
-    iter(???)
+    iter(-bound)
   }
   
   /**
    * Returns whether there exists a bounded integer within `s`
    * that satisfies `p`.
    */
-    def exists(s: Set, p: Int => Boolean): Boolean = ???
+    def exists(s: Set, p: Int => Boolean): Boolean = {
+    def iter(a: Int): Boolean = {
+      if (a > bound) false
+      else if (contains(s, a) && forall( singletonSet(a),p)) true
+      else iter(a + 1)
+    }
+    iter(-bound)
+  }
   
   /**
    * Returns a set transformed by applying `f` to each element of `s`.
    */
-    def map(s: Set, f: Int => Int): Set = ???
+    def map(s: Set, f: Int => Int): Set = {
+    var t = s
+    def iter(a: Int): Set = {
+      if (a > bound) diff(s, t)
+      else if (contains(s, a)) {
+        t = union(s, Set(f(a)))
+        t
+      }
+      else iter(a + 1)
+    }
+    iter(-bound)
+  }
+
+  printSet(map(Set(1), x => x * 2))
   
   /**
    * Displays the contents of a set
@@ -102,4 +122,6 @@ object FunSets {
   def printSet(s: Set) {
     println(toString(s))
   }
+
+
 }
