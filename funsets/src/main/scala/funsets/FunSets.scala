@@ -58,12 +58,22 @@ object FunSets extends App {
    * Returns the subset of `s` for which `p` holds.
    */
     def filter(s: Set, p: Int => Boolean): Set = (x: Int) => contains(s, x) && p(x)
+
+  /**
+    * val isEven = (x: Int) => x % 2 == 0
+    *isEven(20) // true
+    *
+    *val s1 = singletonSet(1)
+    *val s2 = singletonSet(2)
+    *filter(s1, isEven)(1) // false
+    *filter(s2, isEven)(2) // true
+    */
   
 
   /**
    * The bounds for `forall` and `exists` are +/- 1000.
    */
-  val bound = 1
+  val bound = 1000
 
   /**
    * Returns whether all bounded integers within `s` satisfy `p`.
@@ -81,33 +91,39 @@ object FunSets extends App {
    * Returns whether there exists a bounded integer within `s`
    * that satisfies `p`.
    */
-    def exists(s: Set, p: Int => Boolean): Boolean = {
+    def exists(s: Set, p: Int => Boolean): Boolean = !forall(s, x => !p(x))
+    /*def exists(s: Set, p: Int => Boolean): Boolean = {
     def iter(a: Int): Boolean = {
       if (a > bound) false
       else if (contains(s, a) && forall( singletonSet(a),p)) true
       else iter(a + 1)
     }
     iter(-bound)
-  }
+  }*/
+
+  /**
+    * def exists(s: Set, p: Int => Boolean): Boolean = !forall(s, x => !p(x))
+    * This one is tricky. The solution means not all elements in s satisfies !p,
+    * which in turn indicates there is at least one element in s satisfies p.
+    */
   
   /**
    * Returns a set transformed by applying `f` to each element of `s`.
    */
-    def map(s: Set, f: Int => Int): Set = {
-    var t = s
-    def iter(a: Int): Set = {
-      if (a > bound) diff(s, t)
-      else if (contains(s, a)) {
-        t = union(s, Set(f(a)))
-        t
-      }
-      else iter(a + 1)
-    }
-    iter(-bound)
-  }
+    def map(s: Set, f: Int => Int): Set = (y:Int) => exists(s, x => f(x) == y)
 
-  printSet(map(Set(1), x => x * 2))
-  
+  /**
+    * This is similar as how we define a singleton set: For any y, if there exists
+    * an element x in s that satisfies the condition f(x) equals y, then y is in new Set map.
+    * val t = map(Set(1,2), x => x * 2)
+    *println(contains(t, 1))
+    *println(contains(t, 2))
+    *println(contains(t, 3))
+    *println(contains(t, 4))
+    */
+
+
+
   /**
    * Displays the contents of a set
    */
