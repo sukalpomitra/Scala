@@ -34,8 +34,8 @@ class NonEmpty(elem: Int, left: IntSet, right: IntSet) extends IntSet {
   }
 
   def incl(x:Int): IntSet = {
-    if (x < elem) left incl x
-    else if (x > elem) right incl x
+    if (x < elem) new NonEmpty(elem, left incl x, right)
+    else if (x > elem) new NonEmpty(elem, left, right incl x)
     else this
   }
 
